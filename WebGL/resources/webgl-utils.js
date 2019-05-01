@@ -7,7 +7,8 @@
  *     FRAGMENT_SHADER.
  * @return {!WebGLShader} The shader.
  */
-function compileShader(gl, shaderSource, shaderType) {
+
+function webglUtils_compileShader(gl, shaderSource, shaderType) {
   // Create the shader object
   var shader = gl.createShader(shaderType);
  
@@ -36,7 +37,8 @@ function compileShader(gl, shaderSource, shaderType) {
  * @param {!WebGLShader} fragmentShader A fragment shader.
  * @return {!WebGLProgram} A program.
  */
-function createProgram(gl, vertexShader, fragmentShader) {
+
+function webglUtils_createProgram(gl, vertexShader, fragmentShader) {
   // create a program.
   var program = gl.createProgram();
  
@@ -63,7 +65,7 @@ function createProgram(gl, vertexShader, fragmentShader) {
  * @param {!HTMLCanvas} the canvas to be drawn on.
  */
 
-function resize(canvas) {
+function webglUtils_resize(canvas) {
     // Resize the canvas to be the same size as the browser
     var displayWidth = canvas.clientWidth;
     var displayHeight = canvas.clientHeight;
@@ -81,3 +83,42 @@ function resize(canvas) {
 
     }
 }
+
+/**
+* Creates a random integer between 0 and the range provided.
+*
+* @param {Integer Range} the maximum random integer desired
+* @return {Random Integer} a random integer
+*/
+
+function webglUtils_randomInt(range){
+    return Math.floor(Math.random() * range);
+} 
+
+
+/**
+* Creates a rectangle with the provided cordinates and adds them to buffer
+*
+* @param {gl context} gl canvas context
+* @param {integer} x coordinate of rectangle
+* @param {integer} y coordinate of rectangle
+* @param {integer} width of rectangle 
+* @param {integer} height of rectangle
+*/
+
+function webglUtils_setRectangle(gl, x, y, width, height) {
+    var x1 = x;
+    var x2 = x + width;
+    var y1 = y;
+    var y2 = y + width;
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        x1, y1,
+        x2, y1,
+        x1, y2,
+        x1, y2,
+        x2, y1,
+        x2, y2]), gl.STATIC_DRAW);
+
+}
+
