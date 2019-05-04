@@ -122,13 +122,33 @@ class webglUtils {
             x2, y2]), gl.STATIC_DRAW);
 
     }
-
+    /*
     createTriangle2D(gl,x1, y1, x2, y2, x3, y3){
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
                     x1, y1, 
                     x2, y2, 
                     x3, y3]), gl.STATIC_DRAW);
     }
+    */
+
+    createTriangle2D(gl){
+        var cx = gl.canvas.width /2;
+        var cy = gl.canvas.height /2;
+
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            cx, cy-150, 
+            cx, cy+150, 
+            cx-150, cy,
+
+            cx, cy-150, 
+            cx, cy+150, 
+            cx+150, cy                            
+    
+            ]), gl.STATIC_DRAW);
+
+    }
+
+  
 
      
 }
