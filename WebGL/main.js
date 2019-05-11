@@ -46,9 +46,68 @@ function render(){
     var cx = max_width/2;
     var cy = max_height/2;
    
-    matrix2 = [ 1, 0,
+    var matrix2 = [ 1, 0,
                 0, 5 ];  
+    
 
+    gl.enableVertexAttribArray(positionAttributeLocation);
+
+        var positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        
+        gl.bufferData(
+            gl.ARRAY_BUFFER, 
+            new Float32Array([
+            cx, cy-150,
+            cx-150, cy, 
+            cx, cy+150, 
+        
+            cx, cy-150, 
+            cx+150, cy,
+            cx, cy+150 
+            ]), gl.STATIC_DRAW);
+
+
+        var size = 2;
+        var type = gl.FLOAT;
+        var normalize = false;
+        var stride = 0;
+        var offset = 0;
+        var primitiveType = gl.TRIANGLES;
+        var count = 6;
+
+        gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
+
+
+        gl.enableVertexAttribArray(colorAttributeLocation);
+
+        var colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferData(
+            gl.ARRAY_BUFFER, 
+            new Float32Array([
+            Math.random(), Math.random(), Math.random(), 1, 
+            Math.random(), Math.random(), Math.random(), 1,
+            Math.random(), Math.random(), Math.random(), 1,
+            Math.random(), Math.random(), Math.random(), 1,
+            Math.random(), Math.random(), Math.random(), 1,
+            Math.random(), Math.random(), Math.random(), 1
+
+
+            ]), gl.STATIC_DRAW);    
+
+        var size = 4;
+        var type = gl.FLOAT;
+        var normalize = false;
+        var stride = 0;
+        var offset = 0; 
+        
+        gl.vertexAttribPointer(colorAttributeLocation, size, type, normalize, stride, offset);
+
+
+        gl.drawArrays(gl.TRIANGLES,0,6);
+
+    /*
     for (i = cy-cy; i < cy+cy; i+=10){
         
      
@@ -99,5 +158,7 @@ function render(){
 
 
         gl.drawArrays(gl.LINES,0,2);
+        
     }
+    */
 }
