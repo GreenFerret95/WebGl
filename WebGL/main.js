@@ -32,7 +32,7 @@ function init(){
 }
 
 function render(){
-    utils.resize(gl.canvas);
+    utils.resizeHD(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -40,69 +40,64 @@ function render(){
     gl.useProgram(program);
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
     
-    /* -------------- POSITION -------------------*/
-
-    gl.enableVertexAttribArray(positionAttributeLocation);
-
-    var positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     
     var max_width = gl.canvas.width;
     var max_height = gl.canvas.height;
     var cx = max_width/2;
     var cy = max_height/2;
+   
+    matrix2 = [ 1, 0,
+                0, 5 ];  
 
-    gl.bufferData(
-        gl.ARRAY_BUFFER, 
-        new Float32Array([
-        cx,cy-150,
-        cx,cy+150, 
-        cx-150, cy,
+    for (i = cy-cy; i < cy+cy; i+=10){
+        
+     
 
-        cx, cy-150, 
-        cx, cy+150, 
-        cx+150, cy
-        ]), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(positionAttributeLocation);
 
+        var positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        
+        gl.bufferData(
+            gl.ARRAY_BUFFER, 
+            new Float32Array([
+            0 * matrix2[0] + 0*matrix2[2], i*matrix2[1] + i*matrix2[3],
+            cx+cx * matrix2[0] + cx+cx*matrix2[2], i*matrix2[1] + i*matrix2[3]
 
-
-    var size = 2;
-    var type = gl.FLOAT;
-    var normalize = false;
-    var stride = 0;
-    var offset = 0;
-    var primitiveType = gl.TRIANGLES;
-    var count = 6;
-
-    gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
+            ]), gl.STATIC_DRAW);
 
 
-    /* ------------------ COLOR ------------------- */
-    gl.enableVertexAttribArray(colorAttributeLocation);
+        var size = 2;
+        var type = gl.FLOAT;
+        var normalize = false;
+        var stride = 0;
+        var offset = 0;
+        var primitiveType = gl.LINES;
+        var count = 2;
 
-    var colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(
-        gl.ARRAY_BUFFER, 
-        new Float32Array([
-        1, 0, 1, 1,
-        1, 0, 0, 1,
-        0, 0, 0, 1,
-
-        1, 1, 1, 1,
-        1, 0, 0, 1,
-        0, 0, 1, 1        
-        ]), gl.STATIC_DRAW);    
-
-    var size = 4;
-    var type = gl.FLOAT;
-    var normalize = false;
-    var stride = 0;
-    var offset = 0; 
-    
-    gl.vertexAttribPointer(colorAttributeLocation, size, type, normalize, stride, offset);
+        gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
 
-    gl.drawArrays(gl.TRIANGLES,0,6);
+        gl.enableVertexAttribArray(colorAttributeLocation);
 
+        var colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+        gl.bufferData(
+            gl.ARRAY_BUFFER, 
+            new Float32Array([
+            Math.random(), Math.random(), Math.random(), 1, 
+            Math.random(), Math.random(), Math.random(), 1
+            ]), gl.STATIC_DRAW);    
+
+        var size = 4;
+        var type = gl.FLOAT;
+        var normalize = false;
+        var stride = 0;
+        var offset = 0; 
+        
+        gl.vertexAttribPointer(colorAttributeLocation, size, type, normalize, stride, offset);
+
+
+        gl.drawArrays(gl.LINES,0,2);
+    }
 }
