@@ -1,49 +1,59 @@
+<!DOCTYPE html> 
 <html>
-    <link rel="stylesheet" href="./style.css">
-    <script src="resources/webgl-utils.js"></script>
+    <head>
+        <meta charset="utf-8">
+        <title>WebGL_0.01</title>
+        <script src="https://rawgit.com/patriciogonzalezvivo/glslCanvas/master/dist/GlslCanvas.js"></script>
+    </head>
+    <body>
+        <canvas id="glslCanvas" data-fragment="
 
 
-    <!-- ~~~~~~~~~~~~~~~~~~~VERTEX SHADER~~~~~~~~~~~~~~~~~~~ -->
-    <script id="2d-vertex-shader" type="notjs"> 
+#ifdef GL_ES
+precision mediump float;
+#endif
 
-        attribute vec2 a_position;
-        attribute vec4 a_color;
-        
-        uniform vec2 u_resolution;
-        varying vec4 v_color;
+#define PI 3.14159265359
 
-        void main(){
-            //convert the position from pixels to 0.0 to 1.0
-            vec2 zeroToOne = a_position / u_resolution;
-        
-            //convert from 0->1 to 0-> 2
-            vec2 zeroToTwo = zeroToOne * 2.0;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
 
-            //convert from 0 -> 2 to -1 -> +1 (clipspace)
-            vec2 clipSpace = zeroToTwo - 1.0;
+/**
+* plot uses smoothstep to make small points on the graph
+* smoothstep( beginning_point, end_point, value to interpolate);
+**/
+float plot(vec2 st, float pct){             
+    return smoothstep(pct-0.02,pct,st.y) - smoothstep(pct, pct+0.02, st.y);
+}
 
-            gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-            v_color = a_color;
-        }
+void main(){
+    vec2 st = gl_FragCoord.xy/u_resolution;     // what percentage between 0 and 1 is gl_FragCoord of the resolution
 
-    </script>
+    float y = fract(sin(st.x * u_time)*-abs((fract(tan(u_time)))));     // equation y = x^5
 
-    <!-- FRAGMENT SHADER -->
-    <script id="2d-fragment-shader" type="notjs">
-        precision mediump float;
+    vec3 color = vec3(y);           // what ever y equals 
 
-        varying vec4 v_color;
- 
-        void main() {
-            gl_FragColor = v_color;
-        }
-    </script>
+    //plot a line;
+    float pct = plot(st,y);
     
+    //color = (1.0-pct)*color+pct*vec3(st.x,st.y,st.x);
+    color = vec3(st.x,st.x,st.x) + pct * color;
+    //gl_FragColor = vec4(color,1.0);
+    gl_FragColor = vec4(pct*u_time,pct*-u_time,pct*u_time,1.0);
+}
 
-    <body> 
-        <canvas id="c"></canvas>
-    </body> 
 
-    <script src="main.js"></script>
 
+        " width="1280" height="720"></canvas>
+    </body>
+
+    <script>
+        var canvas = document.getElementById("glslCanvas");
+        var sandbox = new GlslCanvas(canvas);
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+
+
+    </script>
 </html>
